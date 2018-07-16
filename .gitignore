@@ -39,8 +39,7 @@ node_modules
 .DS_Store
 .env
 keys.js
-twitconfig.js
-spotconfig.js
+
 
 # TypeScript v1 declaration files
 typings/
