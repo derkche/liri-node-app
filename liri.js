@@ -1,13 +1,20 @@
 require("dotenv").config();
 
 var inquirer =  require("inquirer");
+
+var Twit = require('twit');
+var twitconfig = require('./twitconfig');
+
+var Spotify = require('node-spotify-api');
+var spotconfig = require('./spotconfig');
+
 var request = require("request");
+
+var fs = require("fs");
 
 // Twitter Function
 function getTweets(){
 
-  var Twit = require('twit');
-  var twitconfig = require('./twitconfig');
   var T = new Twit(twitconfig);
   
   var params = {
@@ -28,8 +35,6 @@ function getTweets(){
 // Spotify Function
 function spotifyThis(songQuery){
 
-  var Spotify = require('node-spotify-api');
-  var spotconfig = require('./spotconfig');
   var spotify = new Spotify(spotconfig);
   
   spotify.search({ type: 'track', query: songQuery, limit: 1 }, function(err, data) {
@@ -52,7 +57,9 @@ function spotifyThis(songQuery){
 
 // OMDB Function via Request
 function omdbThis(movieQuery){
+
     request("http://www.omdbapi.com/?t="+movieQuery+"&y=&plot=short&apikey=trilogy", function(error, response, body) {
+
       if (!error && response.statusCode === 200) {
         console.log('Title: '+JSON.parse(body).Title);
         console.log('Year: '+JSON.parse(body).Year);
@@ -63,6 +70,7 @@ function omdbThis(movieQuery){
         console.log('Plot: '+JSON.parse(body).Plot);
         console.log('Actors: '+JSON.parse(body).Actors);
       }
+
     });
 }
 
@@ -119,6 +127,22 @@ inquirer.prompt([
     ]).then(function(inquirerResponse){
       console.log('Going to BlockBuster for '+inquirerResponse.movieInput+'.')
       omdbThis(inquirerResponse.movieInput);
+    });
+  };
+
+  //User choses 'Do what it says'
+  if(inquirerResponse.menu == 'Do what it says'){
+
+    fs.readFile("./random.txt", "utf8", function(error, data){
+
+      if (error){
+        return console.log(error);
+      };
+
+      console.log(data);
+      return data;
+
+
     });
   };
 
