@@ -41,35 +41,48 @@ function spotifyThis(query){
     // console.log(JSON.stringify(data.tracks.items[0], null, 2));
 
     //this one gets artist name
-    console.log(JSON.stringify(data.tracks.items[0].artists[0].name, null, 2));
+    console.log('Artist: '+JSON.stringify(data.tracks.items[0].artists[0].name, null, 2));
     //this one gets song name
-    console.log(JSON.stringify(data.tracks.items[0].name, null, 2));
-    //this one gets url
-    console.log(JSON.stringify(data.tracks.items[0].external_urls.spotify, null, 2));
+    console.log('Song: '+JSON.stringify(data.tracks.items[0].name, null, 2));
     //this one gets album name
-    console.log(JSON.stringify(data.tracks.items[0].album.name, null, 2));
+    console.log('Album: '+JSON.stringify(data.tracks.items[0].album.name, null, 2));
+    //this one gets url
+    console.log('URL: '+JSON.stringify(data.tracks.items[0].external_urls.spotify, null, 2));
   });
 
 };
 
-// inquirer.prompt([
-//   {
-//     type: 'list',
-//     name: 'menu',
-//     message: 'What do you want to do?',
-//     choices: [
-//       'My Tweets',
-//       'Spotify this song',
-//       'Movie this',
-//       'Do what it says'
-//     ]
-//   }
-// ]).then(function(inquirerResponse) {
+inquirer.prompt([
+  {
+    type: 'list',
+    name: 'menu',
+    message: 'What do you want to do?',
+    choices: [
+      'My Tweets',
+      'Spotify this song',
+      'Movie this',
+      'Do what it says'
+    ]
+  }
+]).then(function(inquirerResponse) {
 
-//   // console.log(inquirerResponse.menu);
+  // console.log(inquirerResponse.menu);
 
-//   if (inquirerResponse.menu == 'My Tweets'){
-//     getTweets();
-//   }
+  if (inquirerResponse.menu == 'My Tweets'){
+    console.log("Pulling your most recent 20 tweets...");
+    getTweets();
+  }else if (inquirerResponse.menu == 'Spotify this song'){
+    // ask for a song to query
+    inquirer.prompt([
+      {
+        type: 'input',
+        message: 'Song name please',
+        name: 'songInput'
+      }
+    ]).then(function(inquirerResponse){
+      // console.log(inquirerResponse.songInput);
+      spotifyThis(inquirerResponse.songInput);
+    });
+  }
 
-// });
+});
